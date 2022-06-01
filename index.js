@@ -16,7 +16,6 @@ async function init() {
     app.get("/", function (req, res) {
         res.send("Welcome to Titanic API")
     });
-    
 
     app.get("/data", async function (req, res) {
         try {
@@ -30,6 +29,21 @@ async function init() {
             res.status(500).send(err.message);
         }
     });
+
+    app.get("/data/search", async function (req, res) {
+        try {
+            console.log(req.query);
+            await PassengerModel.find(req.query)
+                .sort({ PassengerId: 1 })
+                .then((docs) => {
+                    res.json(docs);
+                }
+                );
+        } catch (err) {
+            res.status(500).send(err.message);
+        }
+    });
+
 }
 
 app.listen(3000);
